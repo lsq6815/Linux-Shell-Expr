@@ -120,10 +120,8 @@ if [ -e $dst ]; then
     echo "target changed to ${dst}"
 fi
 
-if [ $ver ]; then
-    echo "source: ${src}"
-    echo "target: ${dst}"
-fi
+echo "source: ${src}"
+echo "target: ${dst}"
 
 #########################
 # Make target directory #
