@@ -14,7 +14,7 @@
 - [x] 程序应当判断目标文件夹是否已存在，若已存在，则需要在文件夹名后面加上一个随机子串，防止破坏原有文件夹结构。
 
 - [x] 若出现文件重名，需要在新加入的文件后缀名前添加数字段以保证复制的正常进行，
-    >如：若main.cpp发生冲突，则需要修改文件名为main.2.cpp，依次类推。
+    > 如：若main.cpp发生冲突，则需要修改文件名为main.2.cpp，依次类推。
 
 - [x] 程序需要输出源文件夹、目标文件夹、分析文件的路径。
 
@@ -34,4 +34,11 @@
 
 **【参考资料】**
 
-1.  菜鸟教程 shell教程 http://www.runoob.com/linux/linux-shell.html
+1.  [菜鸟教程shell教程](http://www.runoob.com/linux/linux-shell.html)
+
+2.  [Shell scripting: Parsing command-line arguments and flags easily](https://pretzelhands.com/posts/command-line-flags)
+3.  [Shell正则表达式](https://man.linuxde.net/docs/shell_regex.html)
+
+4.  [How to Increment and Decrement Variable in Bash (Counter)](https://linuxize.com/post/bash-increment-decrement-variable/)
+
+5.  [linux shell实现随机数多种方法（date,random,uuid)](https://www.cnblogs.com/chengmo/archive/2010/10/23/1858879.html)
