@@ -153,6 +153,7 @@ find "$src" -type f | sed -E 's/^.*\/(.*)/\1/g' | sed -E '/^[^.]+$/d' | sed -E '
 ##################
 # Make directory #
 ##################
+
 while read ext; do
     mkdir "${dst}/${ext}"
 done < "$ext_info"
@@ -164,6 +165,7 @@ fi
 #############
 # Copy file #
 #############
+
 while read file; do
     getExt "$file"
     if [ -z $EXT ]; then
@@ -178,6 +180,7 @@ done < "$file_info"
 #########################
 # Generate analysis.txt #
 #########################
+
 cat ${analysis} | tail -n+2 | sort -k 3 | column -t > "${dst}/tmp_analysis.txt"
 # Add Table Headers
 sed -i '1 iFROM TO EXT' "${dst}/tmp_analysis.txt"
@@ -187,4 +190,5 @@ echo "analysis: ${analysis}"
 ###################
 # Delete tmp file #
 ###################
+
 rm "${dst}/tmp_analysis.txt" "${ext_info}" "${file_info}"
