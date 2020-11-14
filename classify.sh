@@ -30,12 +30,13 @@ getExt() {
 # Copy file with numbered backup
 # e.g. tmp.cpp => tmp.1.cpp
 # $1= file $2 = target
+START=2
 cpWithBak() {
     bname=`basename -- $1`
     fname="${bname%.*}"
     ext="${bname##*.}"
     flag=""
-    num=1
+    num=${START}
     while [ -z $flag ]; do
         if [ -e "${2}/${bname}" ]; then
             bname="${fname}.${num}.${ext}"
@@ -45,7 +46,7 @@ cpWithBak() {
         fi
     done
 
-    if [[ $num -gt 1 && -n $ver ]]; then 
+    if [[ $num -gt ${START} && -n $ver ]]; then 
         echo "${2}/${fname}.${ext} already exist, ${1} saved as ${2}/${bname}"
     fi
     # append to analysis.txt
@@ -59,7 +60,7 @@ cpAddBak() {
     bname=`basename -- $1`
     fname="${bname}"
     flag=""
-    num=1
+    num=${START}
     while [ -z $flag ]; do
         if [ -e "${2}/${bname}" ]; then
             bname="${fname}_${num}"
@@ -69,7 +70,7 @@ cpAddBak() {
         fi
     done
 
-    if [[ $num -gt 1 && -n $ver ]]; then 
+    if [[ $num -gt ${START} && -n $ver ]]; then 
         echo "${2}/${fname} already exist, ${1} saved as ${2}/${bname}"
     fi
 
@@ -181,7 +182,7 @@ done < "$file_info"
 # Generate analysis.txt #
 #########################
 
-cat ${analysis} | tail -n+2 | sort -k 3 | column -t > "${dst}/tmp_analysis.txt"
+cat ${analysis} | sort -k 3 | column -t > "${dst}/tmp_analysis.txt"
 # Add Table Headers
 sed -i '1 iFROM TO EXT' "${dst}/tmp_analysis.txt"
 cat "${dst}/tmp_analysis.txt" | column -t > "${analysis}"
