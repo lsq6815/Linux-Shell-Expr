@@ -40,7 +40,7 @@
 
     其中$0表示脚本名，$1, $2, ... , ${n}表示第n个参数
 
-2. `shift`默认参数为1，接受整数参数来移动指向参数数组的下标可以理解为对参数队列出队n次（n为参数）
+2. `shift`默认参数为1，接受整数参数来移动指向参数数组的下标。可以理解为对参数队列出队n次（n为参数）
 
 [Shell scripting: Parsing command-line arguments and flags easily](https://pretzelhands.com/posts/command-line-flags)
 
@@ -57,16 +57,16 @@
     ext="${bname##*.}"
     ```
 
-2.  使用sed：sed不仅支持子串替换，还支持**删除没有后缀的文件名**，用途跟广泛
+2.  使用sed：sed不仅支持子串替换，还支持**删除没有后缀的文件名**，用途更广泛
     ```bash
     EXT=`echo -n "$file" | sed -E 's/^.*\/(.*)/\1/g' | sed -E '/^[^.]+$/d' | sed -E '/^\..+$/d' | sed -E '/^.+\.$/d' | sed -E 's/^.+\.(.+)/\1/g'`
     ```
-    >   如果文件没有后缀比如（`.vimrc`、`has.`、`i_am_no_dot`），`EXT`返回空串，来帮助判断
+    >   如果文件没有后缀名，比如（`.vimrc`、`has.`、`i_am_no_dot`），`EXT`返回空串来帮助判断
 
 ### 遍历文件夹
-`shell`没有类似`Python`的`pathwalk`功能，可以方便的遍历文件夹和**子文件夹**，当时我们可以借助`find`递归地获得所有文件路径
+`shell`没有类似`Python`的`pathwalk`功能，可以方便的遍历文件夹和**子文件夹**，但是我们可以借助`find`递归地获得所有文件路径
 ```bash
-find "${src}" -type f > "${.file_info}" 
+find "${src}" -type f > "${file_info}" 
 ```
 
 ## 实现过程
@@ -227,11 +227,11 @@ analysis: /tmp/classified_7530/analysis.txt
 
 ### 实验过程分析
 
-`classify.sh`的默认目的文件夹是`/tmp`，默认源地址是`./`。所以运行`./classify.sh`等于运行`./classify.sh -s ./ /tmp`。`-h/--help`打印help info并退出脚本，`-s/--source`给定源文件夹。`classify.sh`自己接受参数作为目的地址。当选项参数或参数多次给出时，采纳最后给出的参数（除了`-h/--help`，它会直接退出脚本）。
+`classify.sh`的默认目的文件夹是`/tmp`，默认源地址是`./`。所以运行`./classify.sh`等价于运行`./classify.sh -s ./ /tmp`。`-h/--help`选项打印help info并退出脚本，`-s/--source`选项给定源文件夹。`classify.sh`自己接受参数作为目的地址。当选项参数或参数多次给出时，采纳最后给出的参数（除了`-h/--help`选项，它会直接退出脚本）。
 
 `classify.sh`默认输出源文件夹，目标文件夹和分析文件的路径。如果目标文件夹出现重复，则提示自动重命名。如果给定`-v/-verbose`选项，则会打印生成的子文件夹数，和复制过程中自动重命名的文件。
 
-对于有后缀和没有后缀的文件，`classify.sh`在处理上有所不同，对于有后缀的文件，复制到对应子文件夹中，而没有后缀的文件复制到目标文件夹下。当发送重名时，有后缀的文件在中间添加序号（为了不改变文件后缀名），比如`tmp.c`改为`tmp.2.c`。而对于无后缀的文件，则在末尾添加，比如`i_has_no_dot`改为`i_has_no_dot_2`
+对于有后缀和没有后缀的文件，`classify.sh`在处理上有所不同，对于有后缀的文件，复制到对应子文件夹中，而没有后缀的文件复制到目标文件夹下。当发现重名时，有后缀的文件在中间添加序号（为了不改变文件后缀名），比如`tmp.c`改为`tmp.2.c`。而对于无后缀的文件，则在末尾添加，比如`i_has_no_dot`改为`i_has_no_dot_2`
 
 ### 心得体会
 
