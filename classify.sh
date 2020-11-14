@@ -28,7 +28,7 @@ getExt() {
 }
 
 # Copy file with numbered backup
-# e.g. tmp.cpp => tmp.1.cpp
+# e.g. tmp.cpp => tmp.2.cpp
 # $1= file $2 = target
 START=2
 cpWithBak() {
