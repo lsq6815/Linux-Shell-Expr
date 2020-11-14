@@ -40,7 +40,7 @@
 
     其中$0表示脚本名，$1, $2, ... , ${n}表示第n个参数
 
-2. `shift`默认参数为1，接受整数参数来移动指向参数数组的下标。可以理解为对参数队列出队n次（n为参数）
+2. `shift`默认参数为1，接受整数参数来移动指向参数数组的下标。可以理解为对参数队列出队n次（n为正整数）
 
 [Shell scripting: Parsing command-line arguments and flags easily](https://pretzelhands.com/posts/command-line-flags)
 
