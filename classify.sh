@@ -4,7 +4,17 @@
 # Functions defined here #
 ##########################
 
+################################################################################
 # Function to print help info
+# Globals:
+#     None
+# Arguments:
+#     None
+# Outputs:
+#     None
+# Returns:
+#     None
+################################################################################
 printUsage () {
     cat <<EOF
 classify -- Classify directory by file-extension
@@ -23,24 +33,45 @@ EOF
 # Function to get file extension
 # if no extension, return ""
 EXT=""
+################################################################################
+# Function to get file extension
+# Globals:
+#     EXT: return extension in EXT
+# Arguments:
+#     $1: path/to/file
+# Outputs:
+#     None
+# Returns:
+#     None
+################################################################################
 getExt() {
-    EXT=`echo -n "$1" | sed -E 's/^.*\/(.*)/\1/g' | sed -E '/^[^.]+$/d' | sed -E '/^\..+$/d' | sed -E '/^.+\.$/d' | sed -E 's/^.+\.(.+)/\1/g'`
+    EXT=$(echo -n "$1" | sed -E 's/^.*\/(.*)/\1/g' | sed -E '/^[^.]+$/d' | sed -E '/^\..+$/d' | sed -E '/^.+\.$/d' | sed -E 's/^.+\.(.+)/\1/g')
 }
 
 # Copy file with numbered backup
-# e.g. tmp.cpp => tmp.2.cpp
-# $1= file $2 = target
 START=2
+################################################################################
+# Copy file with numbered backup
+# Globals:
+#     START: count start from number START
+# Arguments:
+#     $1: path/to/file
+#     $2: path/to/copyfile
+# Outputs:
+#     None
+# Returns:
+#     None
+################################################################################
 cpWithBak() {
-    bname=`basename -- $1`
+    bname=$(basename -- "$1")
     fname="${bname%.*}"
     ext="${bname##*.}"
     flag=""
     num=${START}
-    while [ -z $flag ]; do
+    while [ -z "$flag" ]; do
         if [ -e "${2}/${bname}" ]; then
             bname="${fname}.${num}.${ext}"
-            let "num++"
+            ((num++))
         else
             flag="true"
         fi
@@ -54,17 +85,28 @@ cpWithBak() {
     cp "${1}" "${2}/${bname}"
 }
 
+################################################################################
 # Copy function like cpWithBak
 # But used for no extension file
+# Globals:
+#     START: count start with number START
+# Arguments:
+#     $1: path/to/file
+#     $2: path/to/copyfile
+# Outputs:
+#     None
+# Returns:
+#     None
+################################################################################
 cpAddBak() {
-    bname=`basename -- $1`
+    bname=$(basename -- "$1")
     fname="${bname}"
     flag=""
     num=${START}
-    while [ -z $flag ]; do
+    while [ -z "$flag" ]; do
         if [ -e "${2}/${bname}" ]; then
             bname="${fname}_${num}"
-            let "num++"
+            ((num++))
         else
             flag="true"
         fi
@@ -115,7 +157,7 @@ done
 # Verify target directory #
 ###########################
 
-if [ -e $dst ]; then 
+if [ -e "$dst" ]; then 
     echo -n "${dst} already exist, "
     dst="${dst}_${RANDOM}"
     echo "target changed to ${dst}"
@@ -155,21 +197,21 @@ find "$src" -type f | sed -E 's/^.*\/(.*)/\1/g' | sed -E '/^[^.]+$/d' | sed -E '
 # Make directory #
 ##################
 
-while read ext; do
+while read -r ext; do
     mkdir "${dst}/${ext}"
 done < "$ext_info"
 
 if [ $ver ]; then
-    echo "Total: "`cat "${ext_info}" | wc -l`" directory are created"
+    echo "Total: $(wc -l < "${ext_info}") directory are created"
 fi
 
 #############
 # Copy file #
 #############
 
-while read file; do
+while read -r file; do
     getExt "$file"
-    if [ -z $EXT ]; then
+    if [ -z "$EXT" ]; then
         # echo "${file} has no extension"
         cpAddBak "$file" "${dst}"
     else
@@ -182,10 +224,10 @@ done < "$file_info"
 # Generate analysis.txt #
 #########################
 
-cat ${analysis} | sort -k 3 | column -t > "${dst}/tmp_analysis.txt"
+sort -k 3 < "${analysis}" | column -t > "${dst}/tmp_analysis.txt"
 # Add Table Headers
 sed -i '1 iFROM TO EXT' "${dst}/tmp_analysis.txt"
-cat "${dst}/tmp_analysis.txt" | column -t > "${analysis}"
+column -t < "${dst}/tmp_analysis.txt" > "${analysis}" 
 echo "analysis: ${analysis}"
 
 ###################
